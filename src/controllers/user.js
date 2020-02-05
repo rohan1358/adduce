@@ -7,6 +7,7 @@ module.exports = {
         userModel.getUser()
         .then((result) => {
             miscHelper.response(res, result, 200)
+            console.log(result[0].name)
         })
         .catch(err => console.log(err));
     },
@@ -15,6 +16,19 @@ module.exports = {
         userModel.userDetail(id_user)
         .then((result) => {
             res.json(result)
+        })
+        .catch(err => console.log(err));
+    },
+    insertUser: (req, res) =>{
+        const  {name, id_product, qty} = req.body;
+        const data = {
+            name,
+            id_product,
+            qty
+        }
+        userModel.insertUser(data)
+        .then((result) => {
+            res.json(result);
         })
         .catch(err => console.log(err));
     },
@@ -27,7 +41,6 @@ module.exports = {
         userModel.updateUser(id_user, data)
         .then((result) => {
             const resu = res.json(result);
-            console.log("qty = "+qty)
         })
         .catch(err => console.log(err));
     },

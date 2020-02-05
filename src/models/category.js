@@ -49,7 +49,8 @@ module.exports={
     },
     deleteCategory: (id_category) => {
         return new Promise((resolve, reject) => {
-            connecttion.query("DELETE FROM categori WHERE id=?", id_category, (err, result) => {
+
+            connecttion.query(`DELETE FROM categori WHERE id = ${id_category} `, (err, result) => {
                 if(!err){
                     resolve(result);
                 }else{

@@ -3,6 +3,7 @@ const miscHelper = require('../helper/helper')
 
 
 module.exports = {
+    // menampilkan semua data yang ada pala category
     getCategory: (req, res) =>{
         categoryModel.getCategory()
         .then((result) => {
@@ -10,6 +11,7 @@ module.exports = {
         })
         .catch(err => console.log(err));
     },
+    // menampilkan semua data yang ada pada kategory secara detail
     categoryDetail: (req, res) =>{
         const id_category = req.params.id_category;
         categoryModel.categoryDetail(id_category)
@@ -22,9 +24,11 @@ module.exports = {
         console.log(req.body)
         const  {name, id} = req.body;
         const data = {
-            id,
-            name
+            name,
+            id
         }
+        console.log(req.body.id)
+        console.log(req.body.name)
         categoryModel.insertCategory(data)
         .then((result) => {
             res.json(result);

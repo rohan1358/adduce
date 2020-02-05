@@ -1,8 +1,8 @@
 const orderModel = require('../models/order')
-const miscHelper = require('../helper/helper')
-
+const productModel = require('../models/product')
 
 module.exports = {
+    // fungsi ini akan membuat semua folder menjadi terpecah menjadi beberapa halaman/page
     pageOrder:(req, res)=>{
         const  {page} = req.query;
         const data = {
@@ -13,6 +13,7 @@ module.exports = {
             res.json(result);
         })
     },
+    // fungsi yang akan di eksekusi oleh get
     getOrder: (req, res) =>{
         orderModel.getOrder()
         .then((result) => {
@@ -20,6 +21,7 @@ module.exports = {
         })
         .catch(err => console.log(err));
     },
+    // fungsi yang akan di eksekusi oleh get
     orderDetail: (req, res) =>{
         const id_order = req.params.id_order;
         orderModel.orderDetail(id_order)
@@ -35,28 +37,50 @@ module.exports = {
     //     })
     //     .catch(err => console.log(err));
     // },
+
+    
+
+    // fungsi yang akan di eksekusi oleh post order
     insertOrder: (req, res) =>{
-    // // KALAU LINK ITU DI HIT ATAU DI KLIK DAN ADA DATANYA
-    // console.log(req.body) //console ini buat liat datanya
+    const idProduct = req.body.product_id; // mengambil isi parameter yang dikirim dengan key product_id
+    const quant = req.body.qty;  // mengambil isi parameter yang dikirim dengan key qty
+    const user = req.body.user_id
 
-    // // Pasangkan data berdasarkan Key nya dari body request
+    /*
+    idProduct //ariable baru di  KODINGAN 
+    req.body // INI FUNGSI EXPRES UNTUK AMBIL DATA
+    product_id // INI KEY DARI POSTMAN
+    */
 
-    // // Tampung kedalam varible data untuk di kirim ke model
-    const idProduct = req.body.product_id;
-    const quant = req.body.qty;
-    // /*
-    //     variable data mengandung 
-    //     {
-    //         product_id = 1 dan stok = 3
-    //     }
-    //     DATA INI DARI POSTMAN
-    // */
-    // // INI STEP BUAT PINDAH FILE UNTUK PROSES INSERT DAN UPDATE STOK
-    orderModel.insertOrder(idProduct, quant)
+    
 
-        .then((result) => {
-            res.json(result)
+    // ========= ====== SAMPE SINI GAK ADA HUBUGANNYA DATABASE ==================//
+        let stok = 0
+
+        productModel.productDetail(idProduct)
+        .then((result)=>{
+            stok = result[0].stock // mengambil value pada kolom stock
+            // kondisi stock dan kuantiti
+            if(stok > quant && stok > 0){
+                orderModel.insertOrder(idProduct, quant, user)
+                .then((result) => {
+                    res.json(result)
+                })
+                .catch(err => console.log(err));
+            
+            
+            }else {
+                const result2 ={"message" : "stok kurang"}
+                res.json(result2)
+            }
         })
-        .catch(err => console.log(err));
+        
+
+    // melempar 2 variaabe kedalam file model untuk di eksekusi dengan query insert kedalam table tbl_order
+    
     },
+        
+    
+
+
 }

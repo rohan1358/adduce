@@ -10,6 +10,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
 app.use ('/upload', express.static('./upload'))
 
+// penghubung ke folder lain 
 const router = require('./src/routers/index');
 
 app.use('/api/v1', router);
